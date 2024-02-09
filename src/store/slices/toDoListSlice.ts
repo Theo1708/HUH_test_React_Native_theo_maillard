@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '..';
 
 const initialState : toDoListState = {
+    filterIndex: 0,
     toDoList: []
 };
 
@@ -11,6 +12,9 @@ export const toDoListSlice = createSlice({
     name: 'toDoList',
     initialState,
     reducers: {
+        changeFilterIndex (state, {payload}) {
+            state.filterIndex = payload
+        },
         createTask (state, {payload}) {
             state.toDoList.push({
                 title : payload,
@@ -29,11 +33,13 @@ export const toDoListSlice = createSlice({
 });
 
 export const {
+    changeFilterIndex,
     createTask,
     editTask,
     deleteTask
 } = toDoListSlice.actions;
 
 export const selectToDoList = (state: RootState) => state.toDoList.toDoList;
+export const selectFilterIndex = (state: RootState) => state.toDoList.filterIndex;
 
 export default toDoListSlice.reducer;

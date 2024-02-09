@@ -2,17 +2,22 @@ import { ScrollView, Text, TextInput, View, StyleSheet, KeyboardAvoidingView, Pl
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 
-import { selectToDoList, createTask } from '../store/slices/toDoListSlice';
+import { selectToDoList, createTask, selectFilterIndex } from '../store/slices/toDoListSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import Task from '../components/Task';
 import ProgressCard from '../components/ProgressCard';
+import Filter from '../components/Filter';
 
 import Colors from '../styles/colors';
+
+import { FILTER_LIST } from '../components/Filter';
 
 export default function MainPage() {
 	const dispatch = useAppDispatch();
     const toDoList = useAppSelector(selectToDoList)
+
+	const filterFunction = FILTER_LIST[useAppSelector(selectFilterIndex)]['filter']
 
     const [newTask, setNewTask] = useState<string>('')
     const [isAddButtonVisible, setIsAddButtonVisible] = useState<boolean>(false)
@@ -44,11 +49,14 @@ export default function MainPage() {
 				style={styles.container}
 			>
 				<ProgressCard toDoList={toDoList}/>
-				<Text style={styles.title}>
-					Tasks
-				</Text>
+				<View style={styles.header}>
+					<Text style={styles.title}>
+						Tasks
+					</Text>
+					<Filter/>
+				</View>
 				<ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-					{toDoList.map((task) => (
+					{toDoList.filter(filterFunction).map((task) => (
 						<Task
 							id={task.id}
 							key={task.id}
@@ -92,6 +100,15 @@ const styles = StyleSheet.create({
 		backgroundColor : Colors.CARD_BACKGROUND,
 		justifyContent : 'space-between'
     },
+	header : {
+		flexDirection : 'row',
+		justifyContent : 'space-between',
+		alignItems : 'center',
+		marginTop : 25,
+		marginBottom : 10,
+		marginHorizontal : 10,
+		zIndex : 1
+	},
 	title : {
 		fontSize : 30,
 		fontWeight : '600'
