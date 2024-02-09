@@ -1,31 +1,18 @@
 import { ScrollView, Text, TextInput, View, StyleSheet, KeyboardAvoidingView, Platform, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { useState } from 'react';
+
+import { selectToDoList, createTask } from '../store/slices/toDoListSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import Task from '../components/Task';
 
 import Colors from '../styles/colors';
 
-const TODOLIST : ToDoList = [
-	{
-		id : '1',
-		title : 'title1',
-		completed : true
-	},
-	{
-		id : '2',
-		title : 'title2',
-		completed : true
-	},
-	{
-		id : '3',
-		title : 'title3',
-		completed : false
-	}
-]
-
 export default function MainPage() {
+	const dispatch = useAppDispatch();
+    const toDoList = useAppSelector(selectToDoList)
+
     const [newTask, setNewTask] = useState<string>('')
     const [isAddButtonVisible, setIsAddButtonVisible] = useState<boolean>(false)
 
@@ -34,7 +21,7 @@ export default function MainPage() {
             Alert.alert('Missing title', `Please input title before submitting`)
         } else {
             setNewTask('')
-            console.log('create task : ', newTask)
+            dispatch(createTask(newTask))
         }
 		setIsAddButtonVisible(false)
     }
@@ -59,7 +46,7 @@ export default function MainPage() {
 					Tasks
 				</Text>
 				<ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-					{TODOLIST.map((task) => (
+					{toDoList.map((task) => (
 						<Task
 							id={task.id}
 							key={task.id}

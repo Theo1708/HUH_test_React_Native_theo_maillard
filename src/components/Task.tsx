@@ -3,16 +3,20 @@ import { AntDesign, EvilIcons } from '@expo/vector-icons';
 
 import { useState, useRef, useEffect } from 'react';
 
+import { useAppDispatch } from '../store/hooks';
+import { editTask, deleteTask } from '../store/slices/toDoListSlice';
+
 import Colors from '../styles/colors';
 
 export default function Task (props : {title : string, completed : boolean, id : string })  {
+    const dispatch = useAppDispatch();
     
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [newTitle, setNewTitle] = useState<string>(props.title)
     const newTitleRef = useRef<TextInput>(null)
 
     const deleteHandler = () => {
-        console.log('deleted task :', props.id)
+        dispatch(deleteTask(props.id))
     }
 
     const editHandler = (title : string, completed : boolean) => {
@@ -24,7 +28,7 @@ export default function Task (props : {title : string, completed : boolean, id :
                 title,
                 completed 
             }
-            console.log('edit task : ', task)
+            dispatch(editTask(task))
             setIsEditing(false)
         }
     }

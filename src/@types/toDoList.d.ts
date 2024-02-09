@@ -1,3 +1,7 @@
+interface toDoListState {
+    toDoList : ToDoList
+}
+
 type ToDoList = SingleTask[]
 
 interface SingleTask {
