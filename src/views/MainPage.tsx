@@ -6,6 +6,7 @@ import { selectToDoList, createTask } from '../store/slices/toDoListSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import Task from '../components/Task';
+import ProgressCard from '../components/ProgressCard';
 
 import Colors from '../styles/colors';
 
@@ -42,6 +43,7 @@ export default function MainPage() {
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
 				style={styles.container}
 			>
+				<ProgressCard toDoList={toDoList}/>
 				<Text style={styles.title}>
 					Tasks
 				</Text>
